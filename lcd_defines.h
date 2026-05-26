@@ -1,36 +1,36 @@
 #ifndef _LCD_DEFINES_H_
 #define _LCD_DEFINES_H_
 
-#define PIN 0   //lcd data pins d0(0.0) t0 d7(0.7)
-#define RS 18    //register select 0.16
-#define EN 19  //Enable 0.17
-#define RW 24    // read / write 0.18
+// --- Physical Layout Board Hardware Connections ---
+#define PIN 0    // Parallel bus tracks D0 through D7 connected to pins P0.0 through P0.7
+#define RS 18    // Register Select pin tied to controller line P0.18
+#define EN 19    // Hardware Enable execution toggle line tied to controller line P0.19
+#define RW 24    // Read/Write transmission tracking controller line tied to pin P0.24
 
-// lcd commands
+// --- Core Structural Instruction Vector Command Sets ---
+#define CLR 0x01           // Flushes all background data strings out of internal RAM records
+#define RET 0x02           // Commands internal cursor tracking to snap back to index offset zero
+#define D_OFF 0x08         // Disables visibility layers while securing hidden characters context data
+#define D_ON 0x0c          // Activates visibility layers, ensuring background cursor indicators stay hidden
+#define D_ON_C_ON 0x0e     // Activates visibility layers and forces underline cursor rendering on
+#define D_ON_C_BLK 0x0f    // Activates screen visibility and applies flashing loops to the active tracking cursor
 
-#define CLR 0x01 // clear lcd
-#define RET 0x02 //return curser to home
-#define D_OFF 0x08 //display off
-#define D_ON 0x0c //display on
-#define D_ON_C_ON 0x0e //display on curser on
-#define D_ON_C_BLK 0x0f //display on curser blink
+// --- Communication Bus Interface Operational Settings ---
+#define M_8BIT_1L 0x30     // Establishes 8-bit bus configurations tracked across a single line layout
+#define M_8BIT_2L 0x38     // Establishes 8-bit bus configurations tracked across dual line layouts
+#define M_4BIT_1L 0x20     // Establishes 4-bit bus configurations tracked across a single line layout
+#define M_4BIT_2L 0x28     // Establishes 4-bit bus configurations tracked across dual line layouts
 
-//modes of operation
-#define M_8BIT_1L 0x30 //mode 8 bit 1 line
-#define M_8BIT_2L 0x38 //mode 8bit 2 line
-#define M_4BIT_1L 0x20 //mode 4bit 1 line
-#define M_4BIT_2L 0x28 //mode 4bit 2 line
+// --- Character Display Matrix Boundary Mapping Constants ---
+#define GOTO_L1_POSN0 0x80 // Hardware Address index target for Line 1 Char position 0
+#define GOTO_L2_POSN0 0xc0 // Hardware Address index target for Line 2 Char position 0
+#define GOTO_L3_POSN0 0x94 // Hardware Address index target for Line 3 Char position 0
+#define GOTO_L4_POSN0 0xd4 // Hardware Address index target for Line 4 Char position 0
+#define GOTO_CGRAM 0x40    // Root instruction command targeting custom graphic memory records
 
-//lines and positions
-#define GOTO_L1_POSN0 0x80
-#define GOTO_L2_POSN0 0xc0
-#define GOTO_L3_POSN0 0x94
-#define GOTO_L4_POSN0 0xd4
-#define GOTO_CGRAM 0x40
-
-//shifting commands
-#define SHIFT_C_R 0x06 //shift curser right
-#define SHIFT_D_L 0X10 //shift display left
-#define SHIFT_D_R 0x14 //shift display right
+// --- Text Cursor Stepping and Motion Shift Configuration Options ---
+#define SHIFT_C_R 0x06     // Sets auto-increment stepping parameters to push text tracks rightward
+#define SHIFT_D_L 0X10     // Forces visible character window segments to step leftward
+#define SHIFT_D_R 0x14     // Forces visible character window segments to step rightward
 
 #endif
