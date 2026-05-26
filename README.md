@@ -16,12 +16,12 @@ The system handles vehicle instrumentation and telemetry over an industrial **Co
    * Extracts steering frames broadcast from the Main Node to command active-low streaming LED arrays (simulating cascading turn indicators).
 
 3. **Reverse Alert Node (`reverse.c` / `sonic.c`)**
-   * Computes trailing obstacle distance thresholds using an ultrasonic sensor array (`HC-SR05`).
+   * Computes trailing obstacle distance thresholds using an ultrasonic sensor array (`HC-SR04`).
    * Evaluates real-time proximity windows and flags hazards instantly over the CAN network interface (Identifier: `0x201`).
 
 ## 🎛️ Hardware Configuration Map
 * **Microcontroller:** NXP LPC2129 (ARM7TDMI-S with On-Chip Twin CAN Hardware Registers)
 * **Bus Line Transceivers:** MCP2551
-* **Sensor Layer:** DS18B20 1-Wire Temperature Sensor, HC-SR05 Ultrasonic Radar Module
+* **Sensor Layer:** DS18B20 1-Wire Temperature Sensor, HC-SR04 Ultrasonic Radar Module
 * **Outputs:** Alphanumeric Character LCD, Active High-Output Warning Buzzer, LED Arrays
 * **Development Stack:** Keil µVision 4 IDE, Proteus VSM Hardware Simulation Engine
