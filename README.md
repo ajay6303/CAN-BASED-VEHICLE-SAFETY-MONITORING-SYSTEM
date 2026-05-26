@@ -21,7 +21,7 @@ The system handles vehicle instrumentation and telemetry over an industrial **Co
 
 ## 🎛️ Hardware Configuration Map
 * **Microcontroller:** NXP LPC2129 (ARM7TDMI-S with On-Chip Twin CAN Hardware Registers)
-* **Bus Line Transceivers:** MCP2551 / TJA1050 Differential CAN Drivers
+* **Bus Line Transceivers:** MCP2551
 * **Sensor Layer:** DS18B20 1-Wire Temperature Sensor, HC-SR05 Ultrasonic Radar Module
 * **Outputs:** Alphanumeric Character LCD, Active High-Output Warning Buzzer, LED Arrays
 * **Development Stack:** Keil µVision 4 IDE, Proteus VSM Hardware Simulation Engine
