@@ -1,19 +1,19 @@
 # 🚘 CAN-Based Vehicle Safety & Monitoring System
 
-[cite_start]A distributed, high-reliability automotive electronic control unit (ECU) network designed and developed using the **Controller Area Network (CAN)** protocol on the ARM7-based **NXP LPC2129** microcontroller platform[cite: 3, 4]. [cite_start]This architecture establishes real-time, coordinated multi-node communication to monitor critical powertrain metrics, manage smart lighting systems, and execute intelligent collision avoidance[cite: 4].
+A distributed, high-reliability automotive electronic control unit (ECU) network designed and developed using the **Controller Area Network (CAN)** protocol on the ARM7-based **NXP LPC2129** microcontroller platform. This architecture establishes real-time, coordinated multi-node communication to monitor critical powertrain metrics, manage smart lighting systems, and execute intelligent collision avoidance.
 
 ---
 
 ## 💡 1. Core Project Aim & System Insight
 
 ### 🎯 Project Aim
-[cite_start]To design, implement, and validate an advanced automotive safety ecosystem where a centralized monitoring node updates critical operations, coordinates visual turn indicators, and evaluates rear hazard proximities through seamless, multi-node bus communication[cite: 4].
+To design, implement, and validate an advanced automotive safety ecosystem where a centralized monitoring node updates critical operations, coordinates visual turn indicators, and evaluates rear hazard proximities through seamless, multi-node bus communication.
 
 ### 🧠 Prerequisite Engineering Insights
 To fully comprehend or implement this architecture, the following engineering competencies are required:
-* [cite_start]💻 **Embedded-C Programming:** Advanced knowledge of register-level manipulation and modular system firmware layout[cite: 6].
-* [cite_start]📐 **LPC2129 Hardware Architecture:** Deep familiarity with General Purpose Input/Output (GPIO) interfaces, Analog-to-Digital Converters (ADC), Vector Interrupt Controllers (VIC), and native on-chip CAN registers[cite: 7].
-* [cite_start]🔌 **Protocol Architecture:** A foundational understanding of the physical and data link layers of the CAN communication protocol[cite: 8].
+* 💻 **Embedded-C Programming:** Advanced knowledge of register-level manipulation and modular system firmware layout.
+* 📐 **LPC2129 Hardware Architecture:** Deep familiarity with General Purpose Input/Output (GPIO) interfaces, Analog-to-Digital Converters (ADC), Vector Interrupt Controllers (VIC), and native on-chip CAN registers.
+* 🔌 **Protocol Architecture:** A foundational understanding of the physical and data link layers of the CAN communication protocol.
 
 ---
 
@@ -30,7 +30,7 @@ In conventional automotive design, point-to-point wiring configurations introduc
 
 ## 🏗️ 3. Distributed Network Architecture Diagram
 
-[cite_start]The system topology links three independent functional ECUs across a shared physical CAN network, terminated at each cable endpoint with standard $120\text{-}\Omega$ matching resistors ($R_T$) to eliminate signal reflections[cite: 9, 33]:
+The system topology links three independent functional ECUs across a shared physical CAN network, terminated at each cable endpoint with standard $120\text{-}\Omega$ matching resistors ($R_T$) to eliminate signal reflections:
 
 ```text
                ===================== PHYSICAL CAN BUS LINE =====================
