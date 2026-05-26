@@ -51,6 +51,6 @@ The system topology links three independent functional ECUs across a shared phys
          |  [ MAIN NODE ]   |                 | [INDICATOR NODE] |   | [REVERSE NODE]   |
          +------------------+                 +------------------+   +------------------+
           /       |        \                           |                      |
-     [DS18B20]  [LCD]  [Switches]                  [8x LEDs]              [HC-SR05]
+     [DS18B20]  [LCD]  [Switches]                  [8x LEDs]              [HC-SR04]
   (Temp Sensor)        (LISW/RISW/MODE)          (Turn Signals)       (Ultrasonic Radar)
 ```
