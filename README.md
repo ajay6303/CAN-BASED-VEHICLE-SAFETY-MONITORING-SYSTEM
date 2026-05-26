@@ -54,3 +54,28 @@ The system topology links three independent functional ECUs across a shared phys
      [DS18B20]  [LCD]  [Switches]                  [8x LEDs]              [HC-SR04]
   (Temp Sensor)        (LISW/RISW/MODE)          (Turn Signals)       (Ultrasonic Radar)
 ```
+## 🎛️ 4. Hardware Configuration & Pinout Interconnect Tables
+
+For standalone physical deployment or simulation inside the Proteus VSM engine, use these precise microcontroller peripheral pin-mapping configurations.
+
+📊 Comprehensive Pinout Architecture Matrix
+
+                   +-------------------------------------------------------+
+                   |             LPC2129 MICROCONTROLLER                   |
+                   |                                                       |
+                   |  [P0.25/TD2] --------(TX)--------> [MCP2551]          |
+                   |  [P0.24/RD2] <-------(RX)--------- [TRANSCEIVER]      |
+                   |                                                       |
+                   |  [P0.0 - P0.7] ==================> [16x2 LCD DATA]    |
+                   |  [P0.16] ------------------------> [LCD RS CONTROL]   |
+                   |  [P0.17] ------------------------> [LCD EN CONTROL]   |
+                   |                                                       |
+                   |  [P0.18] <-------(1-Wire)--------- [DS18B20 SENSOR]   |
+                   |  [P0.19] ------------------------> [BUZZER ALARM]     |
+                   |                                                       |
+                   |  [P0.14/EINT1] <---(Falling Edge)- [LEFT SWITCH]      |
+                   |  [P0.15/EINT2] <---(Falling Edge)- [RIGHT SWITCH]     |
+                   |  [P0.20] <---------(Polling)------ [MODE SWITCH]      |
+                   +-------------------------------------------------------+
+
+    
