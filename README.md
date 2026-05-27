@@ -244,11 +244,11 @@ To implement this project systematically, follow this module testing sequence to
 ---
 ## 🚀 Compilation & Flashing Instructions
 * Launch the Keil µVision 4 environment.  
-* Select Project -> New uVision Project, choose the NXP LPC2129 device profile from the vendor repository, and confirm the inclusion of the low-level system startup code assembly block (Startup.s).
-* Set up three separate development workspaces or target build profiles to handle the source files for each distinct module: master.c, indicator.c, and reverse.c.
-* Open the project configuration menu (Options for Target), navigate to the Output tab, and ensure the checkbox labeled "Create HEX File" is selected.
-* Click Rebuild All Target Files to compile the source code modules and generate the final production .hex binaries.
-* Connect your development board to your computer using a USB-to-UART converter interface wired to your microcontroller's primary ISP serial programming ports.
-* Open Flash Magic, select your active serial COM port, set the target device profile to LPC2129, choose the compiled .hex file, and click Start to flash the code onto the chip.  
+* Select **Project -> New uVision Project**, choose the **NXP LPC2129** device profile from the vendor repository, and confirm the inclusion of the low-level system startup code assembly block (**Startup.s**).
+* Set up three separate development workspaces or target build profiles to handle the source files for each distinct module: **master.c**, **indicator.c**, and **reverse.c**.
+* Open the project configuration menu (**Options for Target**), navigate to the **Output tab**, and ensure the checkbox labeled **"Create HEX File"** is selected.
+* Click **Rebuild All Target Files** to compile the source code modules and generate the final production .hex binaries.
+* Connect your development board to your computer using a **USB-to-UART converter interface** wired to your microcontroller's primary ISP serial programming ports.
+* Open **Flash Magic**, select your active serial COM port, set the target device profile to LPC2129, choose the compiled .hex file, and click **Start** to flash the code onto the chip.  
   
 ---
