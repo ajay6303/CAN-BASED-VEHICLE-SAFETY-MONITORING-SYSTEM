@@ -47,64 +47,9 @@ For standalone physical deployment or simulation inside the Proteus VSM engine, 
 ## ⚙️ 5. Step-by-Step Software Architecture Flowcharts
 These procedural flowcharts illustrate the firmware state machines and execution loops running on each microcontroller.  
 ## 🧠 Flowchart 1: Main Node Core Loop & Service Routines (master.c)
-```text
-  [POWER-ON RESET]
-       │
-       ▼
-[INITIALIZE PERIPHERALS] ──► Configure System Clocks & GPIO Pins
-       │                 ──► Initialize 16x2 LCD Layout 
-       │                 ──► Configure CAN Registers to 125 kbps
-       │                 ──► Register Interrupt Vectors (EINT1 / EINT2)
-       ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│ MAIN CODE CONTINUOUS EXECUTION LOOP                                     │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  1. READ ENGINE TEMPERATURE                                             │
-│     │                                                                   │
-│     ▼                                                                   │
-│     Query DS18B20 Thermistor via 1-Wire Serial Protocol                 │
-│     Convert Raw Binary Bytes into Celsius Temperature Metric            │
-│     Update and Refresh Current Temperature Values on the LCD            │
-│                                                                         │
-│  2. MONITOR OPERATIONAL DRIVING MODE SWITCH                             │
-│     │                                                                   │
-│     ▼                                                                   │
-│     Is MODE SWITCH Pressed?                                             │
-│        ├──► [YES] ──► Toggle State Flag (Forward ◄──► Reverse)          |
-│        │              Update System Status Banner on LCD Display        │
-│        └──► [NO]  ──► Maintain Active Mode Setting                      │
-│                                                                         │
-│  3. EXECUTE CONTEXT-DEPENDENT PROCESSING                                │
-│     │                                                                   │
-│     ├─► IF (INTERRUPT's ACTIVE)                                         │
-│     │      Check which Switch Interrupt Flag is Asserted                │
-│     │         └──► [LEFT | RIGHT] ──► Encapsulate Directional Command   |
-|     |                                 Data Broadcast ID 0x101 Frame over|
-|     |                                 CAN Bus,if left,send 0x01 data if |
-|     |                                 right,send 0x02 data Clear Local  |
-|     |                                 Steering Flags                    │
-│     │                                                                   │
-│     └─► IF (REVERSE MODE ACTIVE)                                        │
-│            Check CAN Receive Buffer for Incoming Frames                 │
-│               └──► [FRAME RECEIVED] ──► Read ID 0x201 Byte Payload      |
-│                             ├──► [DATA == 1] ──► Pull Alert Buzzer LOW  | 
-│                             └──► [DATA == 0]                            |
-│                                      ├──► Pull Alert Buzzer LOW         |
-|                                      ├──► Delay                         |
-|                                      └──► Pull Alert Buzzer HIGH        |
-└─────────────────────────────────────────────────────────────────────────┘
-       ▲
-       │ (Loop Repeats Infinitely)
-       └──────────────────────────────────────────────────────────────────┘
 
-===========================================================================
-HARDWARE INTERRUPT SERVICE ROUTINES (BACKGROUND TRIGGERS)
-===========================================================================
-When Steering Switch 1 Fired (LISW Press) ──► Enter EINT1 ISR ──► Set Left Turn Flag 
-When Steering Switch 2 Fired (RISW Press) ──► Enter EINT2 ISR ──► Set Right Turn Flag
+![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/ee0a405282846d04035538d9f4ebf5355b0f8938/master.png)
 
-```
 ## 🚨 Flowchart 2: Turn Indicator Satellite Loop (indicator.c)
 
 ```text
