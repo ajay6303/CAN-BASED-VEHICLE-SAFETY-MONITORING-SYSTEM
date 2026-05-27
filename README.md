@@ -55,42 +55,7 @@ These procedural flowcharts illustrate the firmware state machines and execution
 ![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/5fbe7754a7447405e61dae28656a7a0ee021b8dc/indicator.png)---
 ## 📡 Flowchart 3: Rear Collision Avoidance Loop (reverse.c)
 
-```text
-[START] ──► Initialize Hardware Timer 0 Modules ──► Set CAN Communication Parameters
-                                                                          │
-┌─────────────────────────────────────────────────────────────────────────┘
-▼
-[GENERATE TRIGGER OUTPUT PULSE] ──► Assert P0.21 HIGH for 10 Microseconds 
-       │
-       ▼
-[MEASURE ACOUSTIC TIME-OF-FLIGHT]
-       │
-       ▼
-Wait for Echo Input (P0.22) to Transition HIGH ──► Start Timer Counter 
-Wait for Echo Input (P0.22) to Transition LOW  ──► Stop Timer Counter 
-       │
-       ▼
-[COMPUTE TARGET RANGE PROFILE]
-       │
-       ▼
-Calculate Distance: cm = (Timer Register Counts) / 58
-       │
-       ▼
-Is Computed Clearance Below the Preset Safe Limit Value? 
-       │
-       ├──► [YES] (Obstacle Detected) ──► Prepare CAN Frame, Data Byte = 1 
-       │                                  Set Message Identifier = 0x201 
-       │                                                                   │
-       └──► [NO]  (Path Is Clear)     ──► Prepare CAN Frame, Data Byte = 0 
-                                          Set Message Identifier = 0x201 
-       │                                                                   │
-       ▼                                                                   ▼
-[BROADCAST MESSAGE FRAME OVER DETACHED TRANSCEIVER TERMINALS INTO THE NETWORK BACKBONE]
-       │
-       ▼
-Delay 60ms to Stabilize Transducer Sensor Elements ──► Repeat Loop Unconditionally
-```
----
+![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/89865d40b8972ee4e53ea86c0f3b0abb528adff0/reverse.png)---
 ## 🛠️ 6. Sequential Implementation & Verification Strategy
 
 To implement this project systematically, follow this module testing sequence to isolate potential points of hardware or software failure before integrating the distributed network:
