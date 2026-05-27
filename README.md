@@ -58,8 +58,9 @@ The system topology links three independent functional ECUs across a shared phys
 
 For standalone physical deployment or simulation inside the Proteus VSM engine, use these precise microcontroller peripheral pin-mapping configurations.
 
-📊 Comprehensive Pinout Architecture Matrix
+## 📊 Comprehensive Pinout Architecture Matrix
 
+```text
                    +-------------------------------------------------------+
                    |             LPC2129 MICROCONTROLLER                   |
                    |                                                       |
@@ -85,8 +86,66 @@ For standalone physical deployment or simulation inside the Proteus VSM engine, 
                    |  [ 0.22 ] -----------(ECHO)---------> [ HC-SR04 ]     |
                    +-------------------------------------------------------+
 
-  ```
+```
 ---
+## ⚙️ 5. Step-by-Step Software Architecture Flowcharts
+These procedural flowcharts illustrate the firmware state machines and execution loops running on each microcontroller.  
+## 🧠 Flowchart 1: Main Node Core Loop & Service Routines (master.c)
+```text
+  [POWER-ON RESET]
+       │
+       ▼
+[INITIALIZE PERIPHERALS] ──► Configure System Clocks & GPIO Pins
+       │                 ──► Initialize 16x2 LCD Layout 
+       │                 ──► Configure CAN Registers to 125 kbps
+       │                 ──► Register Interrupt Vectors (EINT1 / EINT2)
+       ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│ MAIN CODE CONTINUOUS EXECUTION LOOP                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  1. READ ENGINE TEMPERATURE                                             │
+│     │                                                                   │
+│     ▼                                                                   │
+│     Query DS18B20 Thermistor via 1-Wire Serial Protocol [cite: 44, 60]   │
+│     Convert Raw Binary Bytes into Celsius Temperature Metric            │
+│     Update and Refresh Current Temperature Values on the LCD   │
+│                                                                         │
+│  2. MONITOR OPERATIONAL DRIVING MODE SWITCH                             │
+│     │                                                                   │
+│     ▼                                                                   │
+│     Is MODE SWITCH Pressed? [cite: 43, 62]                              │
+│        ├──► [YES] ──► Toggle State Flag (Forward ◄──► Reverse) 
+│        │              Update System Status Banner on LCD Display        │
+│        └──► [NO]  ──► Maintain Active Mode Setting                      │
+│                                                                         │
+│  3. EXECUTE CONTEXT-DEPENDENT PROCESSING                                │
+│     │                                                                   │
+│     ├─► IF (FORWARD MODE ACTIVE) [cite: 64]                             │
+│     │      Check if Switch Interrupt Flag is Asserted         │
+│     │         └──► [TRUE] ──► Encapsulate Directional Command Data      │
+│     │                         Broadcast ID 0x101 Frame over CAN Bus     │
+│     │                         Clear Local Steering Flags                │
+│     │                                                                   │
+│     └─► IF (REVERSE MODE ACTIVE) [cite: 64, 66]                         │
+│            Check CAN Receive Buffer for Incoming Frames [cite: 66]      │
+│               └──► [FRAME RECEIVED] ──► Read ID 0x201 Byte Payload [cite: 66]
+│                             ├──► [DATA == 1] ──► Pull Alert Buzzer HIGH 
+│                             └──► [DATA == 0] ──► Pull Alert Buzzer LOW 
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+       ▲
+       │ (Loop Repeats Infinitely)
+       └──────────────────────────────────────────────────────────────────┘
+
+===========================================================================
+HARDWARE INTERRUPT SERVICE ROUTINES (BACKGROUND TRIGGERS)
+===========================================================================
+When Steering Switch 1 Fired (LISW Press) ──► Enter EINT1 ISR ──► Set Left Turn Flag 
+When Steering Switch 2 Fired (RISW Press) ──► Enter EINT2 ISR ──► Set Right Turn Flag
+
+```
+
 
 
     
