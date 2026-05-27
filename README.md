@@ -60,21 +60,8 @@ These procedural flowcharts illustrate the firmware state machines and execution
 
 To implement this project systematically, follow this module testing sequence to isolate potential points of hardware or software failure before integrating the distributed network:
 
-```text
-  +---------------------------+       +---------------------------+       +---------------------------+
-  |         STEP 1            |       |         STEP 2            |       |         STEP 3            |
-  | Verify Character Display  | ───&gt| Calibrate 1-Wire Telemetry| ───&gt| Validate Interrupt Lines  |
-  | Commands on 16x2 LCD      |       | for DS18B20 Sensor        |       | and LCD Counter Updates   |
-  +---------------------------+       +---------------------------+       +---------------------------+
-                                                                                        │
-                                                                                        ▼
-  +---------------------------+       +---------------------------+       +---------------------------+
-  |         STEP 6            |       |         STEP 5            |       |         STEP 4            |
-  | Compile Multi-Node Main   | ◄───  | Test Loopback Modes       | ◄───  | Verify Range Calculations |
-  | Code & System Integration |       | on Isolated CAN Drivers   |       | for Ultrasonic Sensors    |
-  +---------------------------+       +---------------------------+       +---------------------------+
+![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/580e09ae52d6f0a1458675b68ddfc2868d820f80/sequential.png)
 
-```
 ---
 ### 💻 7. Software IDE, Toolchain, & Firmware Deployment
 ## ⚙️ Development Infrastructure Requirements
