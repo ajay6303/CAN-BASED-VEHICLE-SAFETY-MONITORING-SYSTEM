@@ -31,7 +31,7 @@ In conventional automotive design, point-to-point wiring configurations introduc
 ## 🏗️ 3. Distributed Network Architecture Diagram
 
 The system topology links three independent functional ECUs across a shared physical CAN network, terminated at each cable endpoint with standard $120\text{-}\Omega$ matching resistors ($R_T$) to eliminate signal reflections:
-![image alt](https://github.com/user-attachments/assets/xxxx-xxxx-xxxx)
+![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/c682b61f0c4275d8e3ee0166411f3680ff04e987/lcd%20data.png))
 ## 🎛️ 4. Hardware Configuration & Pinout Interconnect Tables
 
 For standalone physical deployment or simulation inside the Proteus VSM engine, use these precise microcontroller peripheral pin-mapping configurations.
