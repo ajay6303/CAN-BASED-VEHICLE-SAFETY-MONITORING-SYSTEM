@@ -52,32 +52,7 @@ These procedural flowcharts illustrate the firmware state machines and execution
 
 ## 🚨 Flowchart 2: Turn Indicator Satellite Loop (indicator.c)
 
-```text
-[START] ──► Initialize Ports ──► Configure CAN Controller Core ──► Turn All LEDs OFF
-                                                                          │
-┌─────────────────────────────────────────────────────────────────────────┘
-▼
-[POLL CAN RECEIVE BUFFER REGISTER] ◄──────────────────────────────────────┐
-       │                                                                  │
-       ├──► [BUFFER EMPTY] ──► Maintain Current State ────────────────────┤
-       │                                                                  │
-       └──► [FRAME CAPTURED]                                              │
-                 │                                                        │
-                 ▼                                                        │
-       Does Frame Identifier Match Target ID 0x101?                       │
-                 ├──► [NO]  ──► Discard Packet and Release Buffer ────────┤
-                 │                                                        │
-                 └──► [YES] ──► Parse Byte Payload                        │
-                                   │                                      │
-                                   ├─► IF (DATA PAYLOAD == 1)             │
-                                   │      Execute Left Turn Animation:    │
-                                   │      Scroll LEDs Right-to-Left       |
-                                   │                                      │
-                                   └─► IF (DATA PAYLOAD == 2)             │
-                                          Execute Right Turn Animation:   │
-                                          Scroll LEDs Left-to-Right       |
-```
----
+![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/5fbe7754a7447405e61dae28656a7a0ee021b8dc/indicator.png)---
 ## 📡 Flowchart 3: Rear Collision Avoidance Loop (reverse.c)
 
 ```text
