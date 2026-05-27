@@ -107,32 +107,36 @@ These procedural flowcharts illustrate the firmware state machines and execution
 │  1. READ ENGINE TEMPERATURE                                             │
 │     │                                                                   │
 │     ▼                                                                   │
-│     Query DS18B20 Thermistor via 1-Wire Serial Protocol [cite: 44, 60]   │
+│     Query DS18B20 Thermistor via 1-Wire Serial Protocol                 │
 │     Convert Raw Binary Bytes into Celsius Temperature Metric            │
-│     Update and Refresh Current Temperature Values on the LCD   │
+│     Update and Refresh Current Temperature Values on the LCD            │
 │                                                                         │
 │  2. MONITOR OPERATIONAL DRIVING MODE SWITCH                             │
 │     │                                                                   │
 │     ▼                                                                   │
-│     Is MODE SWITCH Pressed? [cite: 43, 62]                              │
-│        ├──► [YES] ──► Toggle State Flag (Forward ◄──► Reverse) 
+│     Is MODE SWITCH Pressed?                                             │
+│        ├──► [YES] ──► Toggle State Flag (Forward ◄──► Reverse)          |
 │        │              Update System Status Banner on LCD Display        │
 │        └──► [NO]  ──► Maintain Active Mode Setting                      │
 │                                                                         │
 │  3. EXECUTE CONTEXT-DEPENDENT PROCESSING                                │
 │     │                                                                   │
-│     ├─► IF (FORWARD MODE ACTIVE) [cite: 64]                             │
-│     │      Check if Switch Interrupt Flag is Asserted         │
-│     │         └──► [TRUE] ──► Encapsulate Directional Command Data      │
-│     │                         Broadcast ID 0x101 Frame over CAN Bus     │
-│     │                         Clear Local Steering Flags                │
+│     ├─► IF (INTERRUPT's ACTIVE)                                         │
+│     │      Check which Switch Interrupt Flag is Asserted                │
+│     │         └──► [LEFT | RIGHT] ──► Encapsulate Directional Command   |
+|     |                                 Data Broadcast ID 0x101 Frame over|
+|     |                                 CAN Bus,if left,send 0x01 data if |
+|     |                                 right,send 0x02 data Clear Local  |
+|     |                                 Steering Flags                    │
 │     │                                                                   │
-│     └─► IF (REVERSE MODE ACTIVE) [cite: 64, 66]                         │
-│            Check CAN Receive Buffer for Incoming Frames [cite: 66]      │
-│               └──► [FRAME RECEIVED] ──► Read ID 0x201 Byte Payload [cite: 66]
-│                             ├──► [DATA == 1] ──► Pull Alert Buzzer HIGH 
-│                             └──► [DATA == 0] ──► Pull Alert Buzzer LOW 
-│                                                                         │
+│     └─► IF (REVERSE MODE ACTIVE)                                        │
+│            Check CAN Receive Buffer for Incoming Frames                 │
+│               └──► [FRAME RECEIVED] ──► Read ID 0x201 Byte Payload      |
+│                             ├──► [DATA == 1] ──► Pull Alert Buzzer LOW  | 
+│                             └──► [DATA == 0]                            |
+│                                      ├──► Pull Alert Buzzer LOW         |
+|                                      ├──► Delay                         |
+|                                      └──► Pull Alert Buzzer HIGH        |
 └─────────────────────────────────────────────────────────────────────────┘
        ▲
        │ (Loop Repeats Infinitely)
@@ -145,7 +149,106 @@ When Steering Switch 1 Fired (LISW Press) ──► Enter EINT1 ISR ──► Se
 When Steering Switch 2 Fired (RISW Press) ──► Enter EINT2 ISR ──► Set Right Turn Flag
 
 ```
+## 🚨 Flowchart 2: Turn Indicator Satellite Loop (indicator.c)
 
+```text
+[START] ──► Initialize Ports ──► Configure CAN Controller Core ──► Turn All LEDs OFF
+                                                                          │
+┌─────────────────────────────────────────────────────────────────────────┘
+▼
+[POLL CAN RECEIVE BUFFER REGISTER] ◄──────────────────────────────────────┐
+       │                                                                  │
+       ├──► [BUFFER EMPTY] ──► Maintain Current State ────────────────────┤
+       │                                                                  │
+       └──► [FRAME CAPTURED]                                              │
+                 │                                                        │
+                 ▼                                                        │
+       Does Frame Identifier Match Target ID 0x101?                       │
+                 ├──► [NO]  ──► Discard Packet and Release Buffer ────────┤
+                 │                                                        │
+                 └──► [YES] ──► Parse Byte Payload                        │
+                                   │                                      │
+                                   ├─► IF (DATA PAYLOAD == 1)             │
+                                   │      Execute Left Turn Animation:    │
+                                   │      Scroll LEDs Right-to-Left       |
+                                   │                                      │
+                                   └─► IF (DATA PAYLOAD == 2)             │
+                                          Execute Right Turn Animation:   │
+                                          Scroll LEDs Left-to-Right       |
+```
+---
+## 📡 Flowchart 3: Rear Collision Avoidance Loop (reverse.c)
 
+```text
+[START] ──► Initialize Hardware Timer 0 Modules ──► Set CAN Communication Parameters
+                                                                          │
+┌─────────────────────────────────────────────────────────────────────────┘
+▼
+[GENERATE TRIGGER OUTPUT PULSE] ──► Assert P0.21 HIGH for 10 Microseconds 
+       │
+       ▼
+[MEASURE ACOUSTIC TIME-OF-FLIGHT]
+       │
+       ▼
+Wait for Echo Input (P0.22) to Transition HIGH ──► Start Timer Counter 
+Wait for Echo Input (P0.22) to Transition LOW  ──► Stop Timer Counter 
+       │
+       ▼
+[COMPUTE TARGET RANGE PROFILE]
+       │
+       ▼
+Calculate Distance: cm = (Timer Register Counts) / 58
+       │
+       ▼
+Is Computed Clearance Below the Preset Safe Limit Value? 
+       │
+       ├──► [YES] (Obstacle Detected) ──► Prepare CAN Frame, Data Byte = 1 
+       │                                  Set Message Identifier = 0x201 
+       │                                                                   │
+       └──► [NO]  (Path Is Clear)     ──► Prepare CAN Frame, Data Byte = 0 
+                                          Set Message Identifier = 0x201 
+       │                                                                   │
+       ▼                                                                   ▼
+[BROADCAST MESSAGE FRAME OVER DETACHED TRANSCEIVER TERMINALS INTO THE NETWORK BACKBONE]
+       │
+       ▼
+Delay 60ms to Stabilize Transducer Sensor Elements ──► Repeat Loop Unconditionally
+```
+---
+## 🛠️ 6. Sequential Implementation & Verification Strategy
 
-    
+To implement this project systematically, follow this module testing sequence to isolate potential points of hardware or software failure before integrating the distributed network:
+
+```text
+  +---------------------------+       +---------------------------+       +---------------------------+
+  |         STEP 1            |       |         STEP 2            |       |         STEP 3            |
+  | Verify Character Display  | ───&gt| Calibrate 1-Wire Telemetry| ───&gt| Validate Interrupt Lines  |
+  | Commands on 16x2 LCD      |       | for DS18B20 Sensor        |       | and LCD Counter Updates   |
+  +---------------------------+       +---------------------------+       +---------------------------+
+                                                                                        │
+                                                                                        ▼
+  +---------------------------+       +---------------------------+       +---------------------------+
+  |         STEP 6            |       |         STEP 5            |       |         STEP 4            |
+  | Compile Multi-Node Main   | ◄───  | Test Loopback Modes       | ◄───  | Verify Range Calculations |
+  | Code & System Integration |       | on Isolated CAN Drivers   |       | for Ultrasonic Sensors    |
+  +---------------------------+       +---------------------------+       +---------------------------+
+
+```
+---
+### 💻 7. Software IDE, Toolchain, & Firmware Deployment
+## ⚙️ Development Infrastructure Requirements
+* **Firmware IDE:** Keil µVision 4.
+* **Flashing Software Utility:** Flash Magic.
+* **Simulation Environment:** vector lpc2129 hardware kit.
+
+---
+## 🚀 Compilation & Flashing Instructions
+* Launch the Keil µVision 4 environment.  
+* Select Project -> New uVision Project, choose the NXP LPC2129 device profile from the vendor repository, and confirm the inclusion of the low-level system startup code assembly block (Startup.s).
+* Set up three separate development workspaces or target build profiles to handle the source files for each distinct module: master.c, indicator.c, and reverse.c.
+* Open the project configuration menu (Options for Target), navigate to the Output tab, and ensure the checkbox labeled "Create HEX File" is selected.
+* Click Rebuild All Target Files to compile the source code modules and generate the final production .hex binaries.
+* Connect your development board to your computer using a USB-to-UART converter interface wired to your microcontroller's primary ISP serial programming ports.
+* Open Flash Magic, select your active serial COM port, set the target device profile to LPC2129, choose the compiled .hex file, and click Start to flash the code onto the chip.  
+  
+---
