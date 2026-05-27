@@ -31,29 +31,7 @@ In conventional automotive design, point-to-point wiring configurations introduc
 ## 🏗️ 3. Distributed Network Architecture Diagram
 
 The system topology links three independent functional ECUs across a shared physical CAN network, terminated at each cable endpoint with standard $120\text{-}\Omega$ matching resistors ($R_T$) to eliminate signal reflections:
-
-```text
-               ===================== PHYSICAL CAN BUS LINE =====================
-                  ||                                   ||                     ||
-               [ CANH ]                             [ CANH ]               [ CANH ]
-               [ CANL ]                             [ CANL ]               [ CANL ]
-                  ||                                   ||                     ||
-         +------------------+                 +------------------+   +------------------+
-         |     MCP2551      |                 |     MCP2551      |   |     MCP2551      |
-         | CAN Transceiver  |                 | CAN Transceiver  |   | CAN Transceiver  |
-         +------------------+                 +------------------+   +------------------+
-               ||   ||                               ||   ||                ||   ||
-         +------------------+                 +------------------+   +------------------+
-         |   On-Chip CAN    |                 |   On-Chip CAN    |   |   On-Chip CAN    |
-         |    Controller    |                 |    Controller    |   |    Controller    |
-         +------------------+                 +------------------+   +------------------+
-         |     LPC2129      |                 |     LPC2129      |   |     LPC2129      |
-         |  [ MAIN NODE ]   |                 | [INDICATOR NODE] |   | [REVERSE NODE]   |
-         +------------------+                 +------------------+   +------------------+
-          /       |        \                           |                      |
-     [DS18B20]  [LCD]  [Switches]                  [8x LEDs]              [HC-SR04]
-  (Temp Sensor)        (LISW/RISW/MODE)          (Turn Signals)       (Ultrasonic Radar)
-```
+![image](https://github.com/user-attachments/assets/xxxx-xxxx-xxxx)
 ## 🎛️ 4. Hardware Configuration & Pinout Interconnect Tables
 
 For standalone physical deployment or simulation inside the Proteus VSM engine, use these precise microcontroller peripheral pin-mapping configurations.
