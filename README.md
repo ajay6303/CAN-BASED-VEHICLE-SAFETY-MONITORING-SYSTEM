@@ -31,40 +31,18 @@ In conventional automotive design, point-to-point wiring configurations introduc
 ## 🏗️ 3. Distributed Network Architecture Diagram
 
 The system topology links three independent functional ECUs across a shared physical CAN network, terminated at each cable endpoint with standard $120\text{-}\Omega$ matching resistors ($R_T$) to eliminate signal reflections:
+
 ![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/8ee43feacc039cab1bb0b172ec08ab96d1875715/interface.png)
+
+---
 ## 🎛️ 4. Hardware Configuration & Pinout Interconnect Tables
 
 For standalone physical deployment or simulation inside the Proteus VSM engine, use these precise microcontroller peripheral pin-mapping configurations.
 
 ## 📊 Comprehensive Pinout Architecture Matrix
 
-```text
-                   +-------------------------------------------------------+
-                   |             LPC2129 MICROCONTROLLER                   |
-                   |                                                       |
-                   |  ***************** MAIN NODE **********************   |
-                   |                                                       |
-                   |  [P0.0 - P0.7] ==================> [16x2 LCD DATA]    |
-                   |  [P0.18] ------------------------> [LCD RS CONTROL]   |
-                   |  [P0.19] ------------------------> [LCD EN CONTROL]   |
-                   |                                                       |
-                   |  [P0.16] <-------(1-Wire)--------- [DS18B20 SENSOR]   |
-                   |  [P0.8] ------------------------> [BUZZER ALARM]      |
-                   |                                                       |
-                   |  [P0.14/EINT1] <---(Falling Edge)- [LEFT SWITCH]      |
-                   |  [P0.15/EINT2] <---(Falling Edge)- [RIGHT SWITCH]     |
-                   |  [P0.9] <---------(Polling)------ [MODE SWITCH]       |
-                   |                                                       |
-                   |  ******************* Indicator ********************   |
-                   |  [p0.8 -p0.15] ==================> [ 8 LED's ]        |
-                   |                                                       |
-                   |  ******************** Reverse *********************   |
-                   |                                                       |
-                   |  [ 0.21 ] <----------(TRIG)---------- [ HC-SR04 ]     |
-                   |  [ 0.22 ] -----------(ECHO)---------> [ HC-SR04 ]     |
-                   +-------------------------------------------------------+
+![image alt](https://github.com/ajay6303/LPC2129-CAN-Automotive-Safety-System/blob/d336e2f14461ee1612cc4122f46f111482ff5b16/pinout.png)
 
-```
 ---
 ## ⚙️ 5. Step-by-Step Software Architecture Flowcharts
 These procedural flowcharts illustrate the firmware state machines and execution loops running on each microcontroller.  
